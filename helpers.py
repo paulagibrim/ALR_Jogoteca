@@ -1,7 +1,7 @@
 import os
 
 from wtforms import StringField, FileField, SubmitField, validators, PasswordField
-from jogoteca import app, designPATH, db
+from jogoteca import app
 from flask_wtf import FlaskForm
 
 
@@ -14,8 +14,10 @@ class JogosForm(FlaskForm):
 
 
 class UsersForm(FlaskForm):
+    name = StringField('Nome', [validators.DataRequired(), validators.Length(min=2, max=20)])
     nickname = StringField('Nickname', [validators.DataRequired(), validators.Length(min=2, max=8)])
     senha = PasswordField('Senha', [validators.DataRequired(), validators.Length(min=2, max=100)])
+    salvar = SubmitField('Salvar')
     login = SubmitField('Login')
 
 
@@ -32,4 +34,8 @@ def delete_old_imgs(id):
     if file != 'default_banner.jpg':
         os.remove(os.path.join(app.config['UPLOAD_PATH'], file))
 
-    # return 'default_banner.jpg'
+
+# def clear_upload_folder():
+#     for filename in os.listdir(app.config['UPLOAD_PATH']):
+#         if 'banner' in filename and filename != 'default_banner.jpg':
+#             os.remove(os.path.join(app.config['UPLOAD_PATH'], filename))

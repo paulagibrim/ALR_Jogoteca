@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import errorcode
-from flask_bcrypt import generate_password_hash
+import os
+from jogoteca import app
 
 print("Conectando...")
 try:
@@ -59,9 +60,7 @@ for tabela_nome in TABLES:
 # inserindo usuarios
 usuario_sql = 'INSERT INTO usuarios (nome, nickname, senha) VALUES (%s, %s, %s)'
 usuarios = [
-      ("Bruno Divino", "BD", generate_password_hash("alohomora").decode('utf-8')),
-      ("Camila Ferreira", "Mila", generate_password_hash("paozinho").decode('utf-8')),
-      ("Guilherme Louro", "Cake", generate_password_hash("python_eh_vida").decode('utf-8'))
+
 ]
 cursor.executemany(usuario_sql, usuarios)
 
@@ -92,3 +91,14 @@ conn.commit()
 
 cursor.close()
 conn.close()
+
+
+# from helpers import clear_upload_folder
+# clear_upload_folder()
+
+def clear_upload_folder():
+    for filename in os.listdir(app.config['UPLOAD_PATH']):
+        if 'banner' in filename and filename != 'default_banner.jpg':
+            os.remove(os.path.join(app.config['UPLOAD_PATH'], filename))
+
+clear_upload_folder()
